@@ -1,5 +1,4 @@
-Author: Samantha Preisig
-Date: Mar 2, 2022
+Author: Samantha Preisig (02/03/2022)
 
 # Tic-Tac-Toe (3x3, 4x4, and 5x5)
 
