@@ -484,7 +484,7 @@ def alpha_beta(board, depth, alpha, beta, maximizing_player):
 def main():
     global size, board, alpha_beta_chosen, nodes_explored, search_depth_reached
 
-    print("Welcome to Tic-Tac-toe!\n")
+    print("Welcome to Tic-Tac-Toe!\n")
 
     # User selects board size (3x3, 4x4, or 5x5)
     size = int(input("Please enter size of Tic-Tac-Toe board [3, 4, or 5]: "))
