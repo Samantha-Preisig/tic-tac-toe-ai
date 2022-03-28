@@ -1,4 +1,11 @@
-### FIXED WIN CONDITIONS ###
+# Authour: Samantha Preisig
+# Purpose: Contains various fixed win conditions
+
+# Checks if a row has been completed (a win has been achieved)
+#   @param int board: the current matrix of the board (with all plays marked)
+#   @param int size: the size of the board (3 = 3x3, 4 = 4x4, 5 = 5x5)
+#   @param char letter: X or O
+#   @return True if letter has completed a row on the board, False otherwise
 def has_row(board, size, letter):
     # Row win conditions for 3x3 TTT board
     if(size == 3):
@@ -39,6 +46,11 @@ def has_row(board, size, letter):
         else:
             return False
 
+# Checks if a row has been completed (a win has been achieved)
+#   @param int board: the current matrix of the board (with all plays marked)
+#   @param int size: the size of the board (3 = 3x3, 4 = 4x4, 5 = 5x5)
+#   @param char letter: X or O
+#   @return True if letter has completed a row on the board, False otherwise
 def has_col(board, size, letter):
     # Column win conditions for 3x3 TTT board
     if(size == 3):
@@ -78,6 +90,11 @@ def has_col(board, size, letter):
             return True
         return False
 
+# Checks if a row has been completed (a win has been achieved)
+#   @param int board: the current matrix of the board (with all plays marked)
+#   @param int size: the size of the board (3 = 3x3, 4 = 4x4, 5 = 5x5)
+#   @param char letter: X or O
+#   @return True if letter has completed a row on the board, False otherwise
 def has_diag(board, size, letter):
     # Diagonal win conditions for 3x3 TTT board
     if(size == 3):
@@ -106,6 +123,10 @@ def has_diag(board, size, letter):
         else:
             return False
 
+# Checks if a row has been completed (a win has been achieved)
+#   @param int board: the current matrix of the 4x4 board (with all plays marked)
+#   @param char letter: X or O
+#   @return True if letter has completed a row on the 4x4 board, False otherwise
 def has_square(board, letter):
     # Only applies to 4x4 TTT board
     if(board[1] == board[2] and board[1] == board[5] and board[1] == board[6] and board[1] == letter):
@@ -129,6 +150,10 @@ def has_square(board, letter):
     else:
         return False
 
+# Checks if a row has been completed (a win has been achieved)
+#   @param int board: the current matrix of the 4x4 board (with all plays marked)
+#   @param char letter: X or O
+#   @return True if letter has completed a row on the 4x4 board, False otherwise
 def has_diamond(board, letter):
     # Only applies to 4x4 TTT board
     if(board[2] == board[5] and board[2] == board[7] and board[2] == board[10] and board[2] == letter):
@@ -142,6 +167,11 @@ def has_diamond(board, letter):
     else:
         return False
 
+# Checks if a row has been completed (a win has been achieved)
+#   @param int board: the current matrix of the 5x5 board (with all plays marked)
+#   @param int size: the size of the board (3 = 3x3, 4 = 4x4, 5 = 5x5)
+#   @param char letter: X or O
+#   @return True if letter has completed a row on the 5x5 board, False otherwise
 def has_plus(board, letter):
     # Only applies to 5x5 TTT board
     if(board[2] == board[6] and board[2] == board[7] and board[2] == board[8] and board[2] == board[12] and board[2] == letter):
@@ -165,6 +195,11 @@ def has_plus(board, letter):
     else:
         return False
 
+# Checks if a row has been completed (a win has been achieved)
+#   @param int board: the current matrix of the 5x5 board (with all plays marked)
+#   @param int size: the size of the board (3 = 3x3, 4 = 4x4, 5 = 5x5)
+#   @param char letter: X or O
+#   @return True if letter has completed a row on the 5x5 board, False otherwise
 def has_L(board, letter):
     # Only applies to 5x5 TTT board
     # L win conditions

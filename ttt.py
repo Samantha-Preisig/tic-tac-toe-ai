@@ -4,17 +4,16 @@ from win_conditions import has_row, has_col, has_diag, has_square, has_diamond, 
 ### GLOBAL VARIABLES ###
 PLAYER = 'X'
 BOT = 'O'
-TIMEOUT_THRESHOLD = 60000000000 # 60000000000ns = 60s = 1min
-timeout = False
-start_time = 0
-size = 0
+TIMEOUT_THRESHOLD = 60000000000 # 60000000000ns = 1min
+timeout = alpha_beta_chosen = False
+start_time = size = nodes_explored = 0
 board = {}
-alpha_beta_chosen = False
 prev_utility = -2 # Stores the last result of minimax (fall back on prev_utility when TIMEOUT_THRESHOLD is reached)
-nodes_explored = 0
 search_depth_reached = -1
 
-### HELPER FUNCTIONS ###
+# Prints the game board instance
+#   @param int board: the current matrix of the board (with all plays marked)
+#   @param int size: the size of the board (3 = 3x3, 4 = 4x4, 5 = 5x5)
 def print_game(board, size):
     if(size == 3):
         print(board[1] + '|' + board[2] + '|' + board[3])
@@ -46,12 +45,20 @@ def print_game(board, size):
         print(board[21] + '|' + board[22] + '|' + board[23] + '|' + board[24] + '|' + board[25])
         print("\n")
 
+# Checks if a specific position is open to play
+#   @param int pos: a position (refer to position matrix)
+#   @return True if the position is blank, Flase otherwise
 def open_position(pos):
     if(board[pos] == ' '):
         return True
     else:
         return False
 
+# Checks if the player/bot has won the game by checking all fixed win conditions
+#   @param int board: the current matrix of the board (with all plays marked)
+#   @param int size: the size of the board (3 = 3x3, 4 = 4x4, 5 = 5x5)
+#   @param char letter: X or O
+#   @return True if letter has won the game, False otherwise
 def game_won(board, size, letter):
     if has_row(board, size, letter):
         return True
@@ -72,12 +79,18 @@ def game_won(board, size, letter):
             return True
     return False
 
+# Checks all positions on the board has been played
+#   @return True if there is no blank position on the board, False otherwise
 def check_draw():
     for key in board.keys():
         if(board[key] == ' '):
             return False
     return True
 
+# If no one has won the game and the game has not timed out, make and print next move
+#   @param char letter: X or O
+#   @param int pos: a position (refer to position matrix)
+#   @param int max_ply: the largest search depth permitted
 def play_position(letter, pos, max_ply):
     if open_position(pos):
         board[pos] = letter
@@ -105,10 +118,14 @@ def play_position(letter, pos, max_ply):
         pos = int(input("Please enter another position: "))
         play_position(letter, pos, max_ply)
 
+# Make player's move (call play_position)
+#   @param int max_ply: the largest search depth permitted
 def player_move(max_ply):
     pos = int(input("Enter the position for 'X': "))
     play_position(PLAYER, pos, max_ply)
 
+# Commute bot's next move based on chosen algorithm
+#   @param int max_ply: the largest search depth permitted
 def bot_move(max_ply):
     global start_time, timeout
     # Checking if player won or drew before proceeding
@@ -138,18 +155,29 @@ def bot_move(max_ply):
             break
     play_position(BOT, best_move, max_ply)
 
+# Returns the maximum value given val_1 and val_2
+#   @param int val_1, val_2: numbers to be compared
+#   @return val_1 if val_1 is greater than or equal to val_2, val_2 otherwise
 def max(val_1, val_2):
     if(val_1 >= val_2):
         return val_1
     else:
         return val_2
 
+# Returns the minimum value given val_1 and val_2
+#   @param int val_1, val_2: numbers to be compared
+#   @return val_1 if val_1 is less than or equal to val_2, val_2 otherwise
 def min(val_1, val_2):
     if(val_1 <= val_2):
         return val_1
     else:
         return val_2
 
+# Computes next best move using Minimax
+#   @param int board: the current matrix of the board (with all plays marked)
+#   @param int depth: the current depth of the search
+#   @param int maximizing_player: 1 for bot, 0 for player
+#   @return max or min evaluation based on maximizing_player value
 def minimax(board, depth, maximizing_player):
     global prev_utility, start_time, timeout, nodes_explored, search_depth_reached
     
@@ -186,6 +214,13 @@ def minimax(board, depth, maximizing_player):
                 min_eval = min(min_eval, eval)
         return min_eval
 
+# Computes next best move using Minimax and Alpha-Beta Pruning
+#   @param int board: the current matrix of the board (with all plays marked)
+#   @param int depth: the current depth of the search
+#   @param int alpha: maximum evaluation
+#   @param int beta: minimum evaluation
+#   @param int maximizing_player: 1 for bot, 0 for player
+#   @return max or min evaluation based on maximizing_player value
 def alpha_beta(board, depth, alpha, beta, maximizing_player):
     global prev_utility, start_time, timeout, nodes_explored, search_depth_reached
     
@@ -230,7 +265,7 @@ def alpha_beta(board, depth, alpha, beta, maximizing_player):
                 prev_utility = min_eval
         return min_eval
 
-### DRIVER ###
+# Driver; basic CLI program with game execution loop
 def main():
     global size, board, alpha_beta_chosen, nodes_explored, search_depth_reached
 
@@ -263,7 +298,7 @@ def main():
         }
     
     # User selects what algorithm the bot uses (minimax or alpha-beta)
-    algo = str(input("How do you want the bot to play? [m = minimax, a = alpha-beta]: "))
+    algo = (input("How do you want the bot to play? [m = minimax, a = alpha-beta]: "))
     while(not(algo == 'm' or algo == 'a')):
         algo = str(input("Please chose an algorithm for bot [m = minimax, a = alpha-beta]: "))
     if(algo == 'a'):
